@@ -105,11 +105,30 @@ namespace System.Tests
         public string Substring_IntInt(string s, int i1, int i2)
             => s.Substring(i1, i2);
         
+        public static IEnumerable<object[]> Split_string_Arguments()
+        {
+            // yield return new object[] {"A B C D E F G H I J K L M N O P Q R S T U V W X Y Z", new char[]{' ', ',', '.'}, StringSplitOptions.None };
+            // yield return new object[] {"A B C D E F G H I J K L M N O P Q R S T U V W X Y Z", new char[]{' ', ',', '.'}, StringSplitOptions.RemoveEmptyEntries };
+            yield return new object[] {PerfUtils.CreateRandomString(128, seed: 42), new char[] { 'a', 'b', '.' }, StringSplitOptions.None};
+            yield return new object[] {PerfUtils.CreateRandomString(128, seed: 42), new char[] { 'a', 'b', '.' }, StringSplitOptions.RemoveEmptyEntries};
+            yield return new object[] {PerfUtils.CreateRandomString(265, seed: 42), new char[] { 'f', 'e', 'g' }, StringSplitOptions.None};
+            yield return new object[] {PerfUtils.CreateRandomString(265, seed: 42), new char[] { 'f', 'e', 'g' }, StringSplitOptions.RemoveEmptyEntries};
+            yield return new object[] {PerfUtils.CreateRandomString(550, seed: 42), new char[] { ' ', ',', '.' }, StringSplitOptions.None};
+            yield return new object[] {PerfUtils.CreateRandomString(550, seed: 42), new char[] { ' ', ',', '.' }, StringSplitOptions.RemoveEmptyEntries};
+            yield return new object[] {PerfUtils.CreateRandomString(1024, seed: 42), new char[] { 't', ',', '.' }, StringSplitOptions.None};
+            yield return new object[] {PerfUtils.CreateRandomString(1024, seed: 42), new char[] { 't', ',', '.' }, StringSplitOptions.RemoveEmptyEntries};
+            yield return new object[] {PerfUtils.CreateRandomString(2048, seed: 42), new char[] { ' ', 'x', '.' }, StringSplitOptions.None};
+            yield return new object[] {PerfUtils.CreateRandomString(2048, seed: 42), new char[] { ' ', 'x', '.' }, StringSplitOptions.RemoveEmptyEntries};
+            yield return new object[] {PerfUtils.CreateRandomString(5096, seed: 42), new char[] { ' ', 'y', '.' }, StringSplitOptions.None};
+            yield return new object[] {PerfUtils.CreateRandomString(5096, seed: 42), new char[] { ' ', 'y', '.' }, StringSplitOptions.RemoveEmptyEntries};
+            yield return new object[] {PerfUtils.CreateRandomString(10192, seed: 42), new char[] { 'a', 'b', 'c' }, StringSplitOptions.None};
+            yield return new object[] {PerfUtils.CreateRandomString(10192, seed: 42), new char[] { 'a', 'b', 'c' }, StringSplitOptions.RemoveEmptyEntries};
+            yield return new object[] {PerfUtils.CreateRandomString(21000, seed: 42), new char[] { 'd', 'e', '.' }, StringSplitOptions.None};
+            yield return new object[] {PerfUtils.CreateRandomString(21000, seed: 42), new char[] { 'd', 'e', '.' }, StringSplitOptions.RemoveEmptyEntries};
+        }
+
         [Benchmark]
-        [Arguments("A B C D E F G H I J K L M N O P Q R S T U V W X Y Z", new char[] { ' ' }, StringSplitOptions.None)]
-        [Arguments("A B C D E F G H I J K L M N O P Q R S T U V W X Y Z", new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)]
-        [Arguments("ABCDEFGHIJKLMNOPQRSTUVWXYZ", new char[]{' '}, StringSplitOptions.None)]
-        [Arguments("ABCDEFGHIJKLMNOPQRSTUVWXYZ", new char[]{' '}, StringSplitOptions.RemoveEmptyEntries)]
+        [ArgumentsSource(nameof(Split_string_Arguments))]
         public string[] Split(string s, char[] arr, StringSplitOptions options)
             => s.Split(arr, options);
 
@@ -166,13 +185,29 @@ namespace System.Tests
             yield return new object[] { "This is a very nice sentence", 'i', 'I' }; // 'i' occurs 3 times in the string
             yield return new object[] { PerfUtils.CreateRandomString(100, seed: 42), 'b', '+' };    // b occurs 8 times in the string
             yield return new object[] { PerfUtils.CreateRandomString(1000, seed: 42), 'b', '+' };   // b occurs 42 times in the string
+            yield return new object[] { PerfUtils.CreateRandomString(5000, seed: 42), 'b', '+' };   // b occurs 42 times in the string
+            yield return new object[] { PerfUtils.CreateRandomString(10000, seed: 42), 'b', '+' };   // b occurs 42 times in the string
+            yield return new object[] { PerfUtils.CreateRandomString(15000, seed: 42), 'c', 'p' };   // b occurs 42 times in the string
+            yield return new object[] { PerfUtils.CreateRandomString(20000, seed: 42), 'z', 'k' };   // b occurs 42 times in the string
+            yield return new object[] { PerfUtils.CreateRandomString(25000, seed: 42), 's', '-' };   // b occurs 42 times in the string
+        }
+
+        public static IEnumerable<object[]> Replace_string_Arguments()
+        {
+            yield return new object[] { "This is a very nice sentence. This is another very nice sentence.", "a", "" };    // Contains two 'l'
+            yield return new object[] { "This is a very nice sentence", "z", "yqw" }; // 'z' does not exist in the string
+            yield return new object[] { "This is a very nice sentence", "i", "asI" }; // 'i' occurs 3 times in the string
+            yield return new object[] { PerfUtils.CreateRandomString(128, seed: 42), "a", PerfUtils.CreateRandomString(8, seed: 42) };    // b occurs 8 times in the string
+            yield return new object[] { PerfUtils.CreateRandomString(512, seed: 42), "b", PerfUtils.CreateRandomString(12, seed: 42) };    // b occurs 8 times in the string
+            yield return new object[] { PerfUtils.CreateRandomString(1024, seed: 42), "c", PerfUtils.CreateRandomString(16, seed: 42) };    // b occurs 8 times in the string
+            yield return new object[] { PerfUtils.CreateRandomString(2048, seed: 42), "d", PerfUtils.CreateRandomString(20, seed: 42) };    // b occurs 8 times in the string
+            yield return new object[] { PerfUtils.CreateRandomString(5096, seed: 42), "e", PerfUtils.CreateRandomString(24, seed: 42) };    // b occurs 8 times in the string
+            yield return new object[] { PerfUtils.CreateRandomString(10192, seed: 42), "f", "asd" };    // b occurs 8 times in the string
+            yield return new object[] { PerfUtils.CreateRandomString(21000, seed: 42), "g", "asdf" };    // b occurs 8 times in the string
         }
 
         [Benchmark]
-        [Arguments("This is a very nice sentence", "bad", "nice")] // there are no "bad" words in the string
-        [Arguments("This is a very nice sentence", "nice", "bad")] // there are is one "nice" word in the string
-        [Arguments("This is a very nice sentence. This is another very nice sentence.", "a", "b")] // both strings are single characters
-        [Arguments("This is a very nice sentence. This is another very nice sentence.", "a", "")] // old string is a single character
+        [ArgumentsSource(nameof(Replace_string_Arguments))]
         public string Replace_String(string text, string oldValue, string newValue)
             => text.Replace(oldValue, newValue);
 

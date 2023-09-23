@@ -15,7 +15,7 @@ namespace System.Collections.Tests
         private const bool BooleanValue = true;
         // 4 - Small size to test non-vectorised paths
         // DefaultCollectionSize - Big enough size to go through the vectorised paths
-        [Params(4, Utils.DefaultCollectionSize)]
+        [Params(4, 512, 1024, 2048, 5096, 10192, 21000, 40768, 45000, 81536)]
         public int Size { get; set; }
 
         private BitArray _original;

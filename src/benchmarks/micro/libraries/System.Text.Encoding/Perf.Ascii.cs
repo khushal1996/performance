@@ -9,8 +9,14 @@ namespace System.Text
     public class Perf_Ascii
     {
         [Params(
-            6, // non-vectorized code path
-            128)] // vectorized code path
+            6,
+            32,
+            64, // non-vectorized code path
+            128,
+            256,
+            512,
+            1024,
+            2048)] // vectorized code path
         public int Size;
 
         private byte[] _bytes, _sameBytes, _bytesDifferentCase;
